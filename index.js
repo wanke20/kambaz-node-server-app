@@ -10,49 +10,47 @@ import "dotenv/config";
 import session from "express-session";
 
 const allowedOrigins = [
-  "https://kambaz-react-web-app-kenneth.netlify.app", // main domain
+    process.env.NETLIFY_URL || "http://localhost:5173",
 ];
 
 const app = express()
 app.use(
-  cors({
-    credentials: true,
-    origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow server-to-server or curl
+    cors({
+        credentials: true,
+        origin: function (origin, callback) {
+            if (!origin) return callback(null, true);
 
-    const url = new URL(origin);
-    const domain = url.hostname;
+            const url = new URL(origin);
+            const domain = url.hostname;
 
-    // Allow main domain or any deploy preview under Netlify
-    if (
-      allowedOrigins.includes(origin) ||
-      domain.endsWith(".netlify.app")
-    ) {
-      callback(null, true);
-    } else {
-      callback(new Error(`CORS: Not allowed by CORS for origin ${origin}`));
-    }
-  },
-}));
+            if (
+                allowedOrigins.includes(origin) ||
+                domain.endsWith(".netlify.app")
+            ) {
+                callback(null, true);
+            } else {
+                callback(new Error(`CORS: Not allowed by CORS for origin ${origin}`));
+            }
+        },
+    }));
 const sessionOptions = {
-  secret: process.env.SESSION_SECRET || "kambaz",
-  resave: false,
-  saveUninitialized: false,
+    secret: process.env.SESSION_SECRET || "kambaz",
+    resave: false,
+    saveUninitialized: false,
 };
 if (process.env.NODE_ENV !== "development") {
-  sessionOptions.proxy = true;
-  sessionOptions.cookie = {
-    sameSite: "none",
-    secure: true,
-    domain: process.env.NODE_SERVER_DOMAIN,
-  };
+    sessionOptions.proxy = true;
+    sessionOptions.cookie = {
+        sameSite: "none",
+        secure: true,
+        domain: process.env.NODE_SERVER_DOMAIN,
+    };
 }
 app.use(session(sessionOptions));
 app.use(express.json());
 
 UserRoutes(app);
 CourseRoutes(app);
-// EnrollmentRoutes(app);
 ModuleRoutes(app);
 AssignmentRoutes(app);
 Lab5(app)
