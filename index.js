@@ -4,19 +4,36 @@ import Lab5 from "./Lab5/index.js";
 import cors from "cors";
 import UserRoutes from "./Kambaz/Users/routes.js";
 import CourseRoutes from "./Kambaz/Courses/routes.js";
-// import EnrollmentRoutes from "./Kambaz/Enrollments/routes.js";
 import ModuleRoutes from "./Kambaz/Modules/routes.js";
 import AssignmentRoutes from './Kambaz/Assignments/routes.js';
 import "dotenv/config";
 import session from "express-session";
 
+const allowedOrigins = [
+  "https://kambaz-react-web-app-kenneth.netlify.app", // main domain
+];
+
 const app = express()
 app.use(
   cors({
     credentials: true,
-    origin: process.env.NETLIFY_URL || "https://kambaz-react-web-app-kenneth.netlify.app"
-  })
-);
+    origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow server-to-server or curl
+
+    const url = new URL(origin);
+    const domain = url.hostname;
+
+    // Allow main domain or any deploy preview under Netlify
+    if (
+      allowedOrigins.includes(origin) ||
+      domain.endsWith(".netlify.app")
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS: Not allowed by CORS for origin ${origin}`));
+    }
+  },
+}));
 const sessionOptions = {
   secret: process.env.SESSION_SECRET || "kambaz",
   resave: false,
