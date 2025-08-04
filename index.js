@@ -10,7 +10,7 @@ import "dotenv/config";
 import session from "express-session";
 
 const allowedOrigins = [
-    process.env.NETLIFY_URL || "http://localhost:5173",
+    process.env.NETLIFY_URL,
 ];
 
 const app = express()
