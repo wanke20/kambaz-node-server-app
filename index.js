@@ -14,7 +14,13 @@ const app = express()
 app.use(
   cors({
     credentials: true,
-    origin: process.env.NETLIFY_URL || "https://localhost:5173",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".netlify.app")) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed from this origin: " + origin));
+      }
+    },
   })
 );
 const sessionOptions = {
