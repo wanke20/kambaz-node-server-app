@@ -2,7 +2,10 @@ import * as dao from "./dao.js";
 import * as courseDao from "../Courses/dao.js";
 import * as enrollmentsDao from "../Enrollments/dao.js";
 export default function UserRoutes(app) {
-    const createUser = (req, res) => { };
+    const createUser = (req, res) => {
+        const newUser = dao.createUser(req.body);
+        res.json(newUser);
+    };
     const deleteUser = (req, res) => { };
     const findAllUsers = (req, res) => { };
     const findUserById = (req, res) => { };
