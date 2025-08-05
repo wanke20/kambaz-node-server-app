@@ -11,7 +11,7 @@ export function deleteModule(moduleId) {
     Database.modules = modules.filter((module) => module._id !== moduleId);
 }
 export function createModule(module) {
-    const newModule = { ...module, _id: uuidv4() };
+    const newModule = { _id: uuidv4(), ...module };
     Database.modules = [...Database.modules, newModule];
     return newModule;
 }
