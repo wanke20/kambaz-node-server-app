@@ -20,9 +20,9 @@ mongoose.connect(CONNECTION_STRING);
 const app = express()
 app.use(cors({
   origin: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
 }));
-app.options('*', cors());
 const sessionOptions = {
     secret: process.env.SESSION_SECRET || "kambaz",
     resave: false,
