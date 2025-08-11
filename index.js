@@ -18,25 +18,17 @@ const allowedOrigins = [
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz"
 mongoose.connect(CONNECTION_STRING);
 const app = express()
-app.use(
-    cors({
-        credentials: true,
-        origin: function (origin, callback) {
-            if (!origin) return callback(null, true);
-
-            const url = new URL(origin);
-            const domain = url.hostname;
-
-            if (
-                allowedOrigins.includes(origin) ||
-                domain.endsWith(".netlify.app")
-            ) {
-                callback(null, true);
-            } else {
-                callback(new Error(`CORS: Not allowed by CORS for origin ${origin}`));
-            }
-        },
-    }));
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
+    credentials: true,
+}));
 const sessionOptions = {
     secret: process.env.SESSION_SECRET || "kambaz",
     resave: false,
