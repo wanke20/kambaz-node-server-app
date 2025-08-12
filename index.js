@@ -17,14 +17,7 @@ const allowedOrigins = [
 
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING
 console.log("Mongo URI:", process.env.MONGO_CONNECTION_STRING);
-
-try {
-    const conn = await mongoose.connect(CONNECTION_STRING);
-    console.log("✅ Connected to MongoDB");
-    console.log("📂 Database name:", conn.connection.name);
-} catch (err) {
-    console.error("MongoDB connection error:", err);
-}
+mongoose.connect(CONNECTION_STRING);
 const app = express()
 app.use(
     cors({
