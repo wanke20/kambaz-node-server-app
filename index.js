@@ -19,14 +19,15 @@ const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.
 mongoose.connect(CONNECTION_STRING);
 const app = express()
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) {
-            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-            return callback(new Error(msg), false);
-        }
-        return callback(null, true);
-    },
+    // origin: function (origin, callback) {
+    //     if (!origin) return callback(null, true);
+    //     if (allowedOrigins.indexOf(origin) === -1) {
+    //         const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+    //         return callback(new Error(msg), false);
+    //     }
+    //     return callback(null, true);
+    // },
+    origin: "https://a6--kambaz-react-web-app-kenneth.netlify.app",
     credentials: true,
 }));
 const sessionOptions = {
