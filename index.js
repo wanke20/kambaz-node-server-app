@@ -16,7 +16,7 @@ const allowedOrigins = [
 ];
 
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING
-mongoose.connect(CONNECTION_STRING);
+mongoose.connect(CONNECTION_STRING, { ssl: true, tlsAllowInvalidCertificates: false });
 const app = express()
 app.use(
     cors({
