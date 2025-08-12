@@ -19,7 +19,7 @@ const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.
 mongoose.connect("mongodb+srv://giuseppi:supersecretpassword@cluster0.onivald.mongodb.net/kambaz?retryWrites=true&w=majority&appName=Cluster0");
 const app = express()
 app.use(cors({
-    origin: true,
+    origin: process.env.NETLIFY_URL,  // added this line
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
 }));
@@ -27,17 +27,13 @@ const sessionOptions = {
     secret: process.env.SESSION_SECRET || "kambaz",
     resave: false,
     saveUninitialized: false,
-    cookie: {
-        httpOnly: false,
-        secure: true,
-        sameSite: "none",
-    },
 };
 if (process.env.NODE_ENV !== "development") {
     sessionOptions.proxy = true;
     sessionOptions.cookie = {
         sameSite: "none",
         secure: true,
+        secure : process.env.NODE_ENV !== "development", // added this line
         // domain: process.env.NODE_SERVER_DOMAIN,
     };
 }
