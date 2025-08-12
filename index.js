@@ -20,13 +20,9 @@ await mongoose.connect("mongodb+srv://giuseppi:supersecretpassword@cluster0.oniv
 
 const app = express()
 app.use(cors({
-    origin: "https://a6--kambaz-react-web-app-kenneth.netlify.app",  // added this line
+    origin: true,  // added this line
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
-}));
-app.options("*", cors({ 
-    origin: "https://a6--kambaz-react-web-app-kenneth.netlify.app",
-    credentials: true
 }));
 const sessionOptions = {
     secret: process.env.SESSION_SECRET || "kambaz",
@@ -37,14 +33,12 @@ if (process.env.NODE_ENV !== "development") {
     sessionOptions.proxy = true;
     sessionOptions.cookie = {
         sameSite: "none",
-        secure: true,
         secure : process.env.NODE_ENV !== "development", // added this line
         // domain: process.env.NODE_SERVER_DOMAIN,
     };
 }
-// app.options('*', cors());
-app.use(session(sessionOptions));
 app.use(express.json());
+app.use(session(sessionOptions));
 
 UserRoutes(app);
 CourseRoutes(app);
