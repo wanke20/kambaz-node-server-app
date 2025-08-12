@@ -13,6 +13,8 @@ import session from "express-session";
 const allowedOrigins = [
     "http://localhost:5173",
     process.env.NETLIFY_URL,
+    "https://a6--kambaz-react-web-app-kenneth.netlify.app",
+    "https://kambaz-node-server-app-a6-o0v9.onrender.com" 
 ];
 
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz"
@@ -20,29 +22,17 @@ mongoose.connect(process.env.MONGO_CONNECTION_STRING, {
   tlsAllowInvalidCertificates: true
 });
 const app = express()
-const allowedOrigin = "https://a6--kambaz-react-web-app-kenneth.netlify.app";
 app.use(cors({
-    // origin: function (origin, callback) {
-    //     if (!origin) return callback(null, true);
-    //     if (allowedOrigins.indexOf(origin) === -1) {
-    //         const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-    //         return callback(new Error(msg), false);
-    //     }
-    //     return callback(null, true);
-    // },
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true,
 }));
-app.use((req, res, next) => {
-  if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Origin', allowedOrigin);
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-    return res.sendStatus(204);
-  }
-  next();
-});
 const sessionOptions = {
     secret: process.env.SESSION_SECRET || "kambaz",
     resave: false,
