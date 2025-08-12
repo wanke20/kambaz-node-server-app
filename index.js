@@ -10,13 +10,7 @@ import AssignmentRoutes from './Kambaz/Assignments/routes.js';
 import "dotenv/config";
 import session from "express-session";
 
-const allowedOrigins = [
-    "http://localhost:5173",
-    process.env.NETLIFY_URL
-];
-
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING
-console.log("Mongo URI:", process.env.MONGO_CONNECTION_STRING);
 mongoose.connect(CONNECTION_STRING);
 const app = express()
 app.use(
