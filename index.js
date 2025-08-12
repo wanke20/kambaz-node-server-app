@@ -16,7 +16,13 @@ import session from "express-session";
 // ];
 
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz"
-await mongoose.connect("mongodb+srv://giuseppi:supersecretpassword@cluster0.onivald.mongodb.net/kambaz?retryWrites=true&w=majority&appName=Cluster0");
+try {
+    await mongoose.connect("mongodb+srv://giuseppi:supersecretpassword@cluster0.onivald.mongodb.net/kambaz?retryWrites=true&w=majority&appName=Cluster0");
+    console.log("Connected successfully!");
+    await mongoose.disconnect();
+} catch (error) {
+    console.error("Connection failed:", error);
+}
 
 const app = express()
 app.use(cors({
@@ -33,7 +39,7 @@ if (process.env.NODE_ENV !== "development") {
     sessionOptions.proxy = true;
     sessionOptions.cookie = {
         sameSite: "none",
-        secure : process.env.NODE_ENV !== "development", // added this line
+        secure: process.env.NODE_ENV !== "development", // added this line
         // domain: process.env.NODE_SERVER_DOMAIN,
     };
 }
