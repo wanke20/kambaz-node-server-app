@@ -10,18 +10,23 @@ import AssignmentRoutes from './Kambaz/Assignments/routes.js';
 import "dotenv/config";
 import session from "express-session";
 
-// const allowedOrigins = [
-//     "http://localhost:5173",
-//     process.env.NETLIFY_URL,
-// ];
+const allowedOrigins = [
+    "http://localhost:5173",
+    process.env.NETLIFY_URL,
+];
 
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz"
-await mongoose.connect(CONNECTION_STRING);  
-
+mongoose.connect(CONNECTION_STRING);
 const app = express()
 app.use(cors({
-    origin: true,//"https://a6--kambaz-react-web-app-kenneth.netlify.app",  // added this line
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
     credentials: true,
 }));
 const sessionOptions = {
@@ -33,12 +38,12 @@ if (process.env.NODE_ENV !== "development") {
     sessionOptions.proxy = true;
     sessionOptions.cookie = {
         sameSite: "none",
-        secure: process.env.NODE_ENV !== "development", // added this line
+        secure: true,
         // domain: process.env.NODE_SERVER_DOMAIN,
     };
 }
-app.use(express.json());
 app.use(session(sessionOptions));
+app.use(express.json());
 
 UserRoutes(app);
 CourseRoutes(app);
