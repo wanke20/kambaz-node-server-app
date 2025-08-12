@@ -20,7 +20,7 @@ await mongoose.connect("mongodb+srv://giuseppi:supersecretpassword@cluster0.oniv
 
 const app = express()
 app.use(cors({
-    origin: true,  // added this line
+    origin: "https://a6--kambaz-react-web-app-kenneth.netlify.app",  // added this line
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
 }));
