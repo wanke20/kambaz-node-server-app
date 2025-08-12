@@ -16,7 +16,9 @@ const allowedOrigins = [
 ];
 
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz"
-mongoose.connect(CONNECTION_STRING);
+await mongoose.connect(process.env.MONGO_CONNECTION_STRING, {
+  tlsAllowInvalidCertificates: true
+});
 const app = express()
 app.use(cors({
     // origin: function (origin, callback) {
@@ -27,7 +29,7 @@ app.use(cors({
     //     }
     //     return callback(null, true);
     // },
-    origin: "https://a6--kambaz-react-web-app-kenneth.netlify.app",
+    origin: true,
     credentials: true,
 }));
 const sessionOptions = {
