@@ -19,7 +19,7 @@ const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.
 mongoose.connect("mongodb+srv://giuseppi:supersecretpassword@cluster0.onivald.mongodb.net/kambaz?retryWrites=true&w=majority&appName=Cluster0");
 const app = express()
 app.use(cors({
-    origin: process.env.NETLIFY_URL,  // added this line
+    origin: "https://a6--kambaz-react-web-app-kenneth.netlify.app",  // added this line
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
 }));
