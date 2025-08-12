@@ -16,7 +16,7 @@ const allowedOrigins = [
 ];
 
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING
-await mongoose.connect(CONNECTION_STRING);
+mongoose.connect(CONNECTION_STRING);
 const app = express()
 app.use(
     cors({
