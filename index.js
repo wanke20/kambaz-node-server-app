@@ -24,6 +24,10 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
 }));
+app.options("*", cors({ 
+    origin: "https://a6--kambaz-react-web-app-kenneth.netlify.app",
+    credentials: true
+}));
 const sessionOptions = {
     secret: process.env.SESSION_SECRET || "kambaz",
     resave: false,
