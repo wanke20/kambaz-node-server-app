@@ -20,6 +20,7 @@ mongoose.connect(process.env.MONGO_CONNECTION_STRING, {
   tlsAllowInvalidCertificates: true
 });
 const app = express()
+const allowedOrigin = "https://a6--kambaz-react-web-app-kenneth.netlify.app";
 app.use(cors({
     // origin: function (origin, callback) {
     //     if (!origin) return callback(null, true);
@@ -29,9 +30,19 @@ app.use(cors({
     //     }
     //     return callback(null, true);
     // },
-    origin: true,
+    origin: allowedOrigins,
     credentials: true,
 }));
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Origin', allowedOrigin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+    return res.sendStatus(204);
+  }
+  next();
+});
 const sessionOptions = {
     secret: process.env.SESSION_SECRET || "kambaz",
     resave: false,
