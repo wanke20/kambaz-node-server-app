@@ -16,17 +16,11 @@ import session from "express-session";
 // ];
 
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz"
-try {
-    await mongoose.connect("mongodb+srv://giuseppi:supersecretpassword@cluster0.onivald.mongodb.net/kambaz?retryWrites=true&w=majority&appName=Cluster0");
-    console.log("Connected successfully!");
-    await mongoose.disconnect();
-} catch (error) {
-    console.error("Connection failed:", error);
-}
+await mongoose.connect(CONNECTION_STRING);  
 
 const app = express()
 app.use(cors({
-    origin: "https://a6--kambaz-react-web-app-kenneth.netlify.app",  // added this line
+    origin: true,//"https://a6--kambaz-react-web-app-kenneth.netlify.app",  // added this line
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
 }));
