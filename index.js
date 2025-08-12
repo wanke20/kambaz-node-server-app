@@ -16,7 +16,10 @@ import session from "express-session";
 // ];
 
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz"
-mongoose.connect("mongodb+srv://giuseppi:supersecretpassword@cluster0.onivald.mongodb.net/kambaz?retryWrites=true&w=majority&appName=Cluster0");
+await mongoose.connect("mongodb+srv://giuseppi:supersecretpassword@cluster0.onivald.mongodb.net/kambaz?retryWrites=true&w=majority&appName=Cluster0", {
+    ssl: true,
+    tlsAllowInvalidCertificates: false,
+});
 const app = express()
 app.use(cors({
     origin: "https://a6--kambaz-react-web-app-kenneth.netlify.app",  // added this line
