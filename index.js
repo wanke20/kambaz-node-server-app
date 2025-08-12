@@ -21,21 +21,8 @@ const app = express()
 app.use(
     cors({
         credentials: true,
-        origin: function (origin, callback) {
-            if (!origin) return callback(null, true);
-
-            const url = new URL(origin);
-            const domain = url.hostname;
-
-            if (
-                allowedOrigins.includes(origin) ||
-                domain.endsWith(".netlify.app")
-            ) {
-                callback(null, true);
-            } else {
-                callback(new Error(`CORS: Not allowed by CORS for origin ${origin}`));
-            }
-        },
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        origin: true,
     }));
 const sessionOptions = {
     secret: process.env.SESSION_SECRET || "kambaz",
