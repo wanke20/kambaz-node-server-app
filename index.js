@@ -22,17 +22,25 @@ mongoose.connect(process.env.MONGO_CONNECTION_STRING, {
   tlsAllowInvalidCertificates: true
 });
 const app = express()
-app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-    credentials: true,
-}));
+app.use(
+    cors({
+        credentials: true,
+        origin: function (origin, callback) {
+            if (!origin) return callback(null, true);
+
+            const url = new URL(origin);
+            const domain = url.hostname;
+
+            if (
+                allowedOrigins.includes(origin) ||
+                domain.endsWith(".netlify.app")
+            ) {
+                callback(null, true);
+            } else {
+                callback(new Error(`CORS: Not allowed by CORS for origin ${origin}`));
+            }
+        },
+    }));
 const sessionOptions = {
     secret: process.env.SESSION_SECRET || "kambaz",
     resave: false,
