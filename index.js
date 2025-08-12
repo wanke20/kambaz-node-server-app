@@ -16,8 +16,12 @@ const allowedOrigins = [
 ];
 
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING
-const status = await mongoose.connect(CONNECTION_STRING, { ssl: true, tlsAllowInvalidCertificates: false });
-console.log("Connected to MongoDB", status);
+try {
+  const conn = await mongoose.connect(CONNECTION_STRING);
+  console.log("Connected to MongoDB", conn.connection.name);
+} catch (err) {
+  console.error("MongoDB connection error:", err);
+}
 const app = express()
 app.use(
     cors({
