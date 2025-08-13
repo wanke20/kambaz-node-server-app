@@ -16,19 +16,19 @@ const app = express()
 app.use(
     cors({
         credentials: true,
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        origin: true,
+        origin: process.env.NETLIFY_URL,
     }));
 const sessionOptions = {
-    secret: process.env.SESSION_SECRET || "kambaz",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
 };
 if (process.env.NODE_ENV !== "development") {
     sessionOptions.proxy = true;
     sessionOptions.cookie = {
+        ...sessionOptions.cookie,
         sameSite: "none",
-        secure: true,
+        secure: false,
         // domain: process.env.NODE_SERVER_DOMAIN,
     };
 }
