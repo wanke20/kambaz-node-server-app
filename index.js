@@ -11,8 +11,7 @@ import "dotenv/config";
 import session from "express-session";
 
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING
-const status = await mongoose.connect(CONNECTION_STRING);
-console.log("Connected to MongoDB", status.connections[0].name);
+mongoose.connect(CONNECTION_STRING);
 const app = express()
 app.use(
     cors({
@@ -27,9 +26,10 @@ const sessionOptions = {
 if (process.env.NODE_ENV !== "development") {
     sessionOptions.proxy = true;
     sessionOptions.cookie = {
-        sameSite: "none",
-        secure: true,
-        domain: process.env.NODE_SERVER_DOMAIN,
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
+        secure: process.env.NODE_ENV !== "development",
     };
 }
 app.use(session(sessionOptions));
